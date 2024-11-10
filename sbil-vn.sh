@@ -47,6 +47,11 @@ if [ -n "$dependencies_input" ]; then
   dependencies=$(echo $dependencies | sed 's/^,//')
 fi
 
+# Remove duplicates from the dependencies list (by converting it into an array and back to a string)
+IFS=',' read -r -a dep_array <<< "$dependencies"
+unique_dependencies=$(echo "${dep_array[@]}" | tr ' ' '\n' | sort -u | tr '\n' ',' | sed 's/,$//')
+
+
 # Hỏi người dùng về build tool (Maven hoặc Gradle)
 echo ""
 echo "Chọn build tool (default: $build):"
@@ -79,7 +84,7 @@ if [ -n "$project_name_input" ]; then project_name="$project_name_input"; fi
 # Hiển thị thông tin người dùng đã nhập
 echo ""
 echo "Bạn đã chọn các tùy chọn sau:"
-echo "Dependencies: $dependencies"
+echo "Dependencies: $unique_dependencies"
 echo "Build tool: $build"
 echo "Java version: $java_version"
 echo "Group ID: $group_id"
@@ -89,7 +94,7 @@ echo "Project name: $project_name"
 # Chạy lệnh spring init với các tham số người dùng đã nhập
 echo ""
 echo "Đang tạo dự án Spring Boot..."
-spring init --build=$build --dependencies=$dependencies --java-version=$java_version --groupId=$group_id --artifactId=$artifact_id --name=$project_name
+spring init --build=$build --dependencies=$unique_dependencies --java-version=$java_version --groupId=$group_id --artifactId=$artifact_id --name=$project_name
 
 # Kiểm tra mã thoát của lệnh `spring init`
 if [ $? -eq 0 ]; then

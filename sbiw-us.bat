@@ -30,18 +30,40 @@ set /p DEPENDENCIES_INPUT=Enter your choice (default: %DEPENDENCIES%):
 
 :: If the user enters something, process the choices
 if not "%DEPENDENCIES_INPUT%"=="" (
-    set DEPENDENCIES=
+    set DEPENDENCIES=  :: Reset the dependencies list
     for %%A in (%DEPENDENCIES_INPUT%) do (
-        if %%A==1 set DEPENDENCIES=!DEPENDENCIES!,web
-        if %%A==2 set DEPENDENCIES=!DEPENDENCIES!,data-jpa
-        if %%A==3 set DEPENDENCIES=!DEPENDENCIES!,security
-        if %%A==4 set DEPENDENCIES=!DEPENDENCIES!,jdbc
-        if %%A==5 set DEPENDENCIES=!DEPENDENCIES!,thymeleaf
-        if %%A==6 set DEPENDENCIES=!DEPENDENCIES!,actuator
-        if %%A==7 set DEPENDENCIES=!DEPENDENCIES!
+        set CHOICE=%%A
+        set CHOICE=!CHOICE: =!  :: Remove spaces if any
+
+        :: Check if the choice is valid (1 to 7)
+        if "!CHOICE!"=="" (
+            echo Invalid choice, skipping...
+        ) else (
+            if "!CHOICE!"=="1" (
+                if "!DEPENDENCIES!" not contains "web" set DEPENDENCIES=!DEPENDENCIES!,web
+            ) else if "!CHOICE!"=="2" (
+                if "!DEPENDENCIES!" not contains "data-jpa" set DEPENDENCIES=!DEPENDENCIES!,data-jpa
+            ) else if "!CHOICE!"=="3" (
+                if "!DEPENDENCIES!" not contains "security" set DEPENDENCIES=!DEPENDENCIES!,security
+            ) else if "!CHOICE!"=="4" (
+                if "!DEPENDENCIES!" not contains "jdbc" set DEPENDENCIES=!DEPENDENCIES!,jdbc
+            ) else if "!CHOICE!"=="5" (
+                if "!DEPENDENCIES!" not contains "thymeleaf" set DEPENDENCIES=!DEPENDENCIES!,thymeleaf
+            ) else if "!CHOICE!"=="6" (
+                if "!DEPENDENCIES!" not contains "actuator" set DEPENDENCIES=!DEPENDENCIES!,actuator
+            ) else if "!CHOICE!"=="7" (
+                echo No dependencies chosen.
+                set DEPENDENCIES=%DEFAULT_DEPENDENCIES%
+            ) else (
+                echo Invalid choice "!CHOICE!". Please choose a number between 1 and 7.
+            )
+        )
     )
-    :: Remove leading comma if exists
+
+    :: Remove leading comma if exists and clean up the dependencies list
     set DEPENDENCIES=!DEPENDENCIES:~1!
+    set DEPENDENCIES=!DEPENDENCIES:,= !
+    set DEPENDENCIES=!DEPENDENCIES: =,!
 )
 
 :: Ask user for build tool (Maven or Gradle)

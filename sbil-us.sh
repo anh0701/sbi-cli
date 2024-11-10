@@ -46,6 +46,10 @@ if [ -n "$dependencies_input" ]; then
   dependencies=$(echo $dependencies | sed 's/^,//')
 fi
 
+# Remove duplicates from the dependencies list (by converting it into an array and back to a string)
+IFS=',' read -r -a dep_array <<< "$dependencies"
+unique_dependencies=$(echo "${dep_array[@]}" | tr ' ' '\n' | sort -u | tr '\n' ',' | sed 's/,$//')
+
 # Ask for build tool choice (Maven or Gradle)
 echo ""
 echo "Choose build tool (default: $build):"
@@ -78,7 +82,7 @@ if [ -n "$project_name_input" ]; then project_name="$project_name_input"; fi
 # Show the user's selected options
 echo ""
 echo "You have selected the following options:"
-echo "Dependencies: $dependencies"
+echo "Dependencies: $unique_dependencies"
 echo "Build tool: $build"
 echo "Java version: $java_version"
 echo "Group ID: $group_id"
@@ -88,7 +92,7 @@ echo "Project name: $project_name"
 # Run the spring init command with the chosen parameters
 echo ""
 echo "Creating your Spring Boot project..."
-spring init --build=$build --dependencies=$dependencies --java-version=$java_version --groupId=$group_id --artifactId=$artifact_id --name=$project_name
+spring init --build=$build --dependencies=$unique_dependencies --java-version=$java_version --groupId=$group_id --artifactId=$artifact_id --name=$project_name
 
 # Check if the project creation was successful
 if [ $? -eq 0 ]; then
