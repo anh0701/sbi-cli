@@ -97,10 +97,10 @@ echo "Đang tạo dự án Spring Boot..."
 spring init --build=$build --dependencies=$unique_dependencies --java-version=$java_version --groupId=$group_id --artifactId=$artifact_id --name=$project_name
 
 # Kiểm tra mã thoát của lệnh `spring init`
-if [ $? -eq 0 ]; then
-  echo ""
-  echo "Dự án $project_name đã được tạo thành công."
-else
-  echo ""
-  echo "Lỗi: Không thể tạo dự án Spring Boot. Vui lòng kiểm tra lại thông tin hoặc kết nối Internet."
-fi
+# if [ $? -eq 0 ]; then
+#   echo ""
+#   echo "Dự án $project_name đã được tạo thành công."
+# else
+#   echo ""
+#   echo "Lỗi: Không thể tạo dự án Spring Boot. Vui lòng kiểm tra lại thông tin hoặc kết nối Internet."
+# fi

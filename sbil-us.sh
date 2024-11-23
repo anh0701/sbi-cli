@@ -95,10 +95,10 @@ echo "Creating your Spring Boot project..."
 spring init --build=$build --dependencies=$unique_dependencies --java-version=$java_version --groupId=$group_id --artifactId=$artifact_id --name=$project_name
 
 # Check if the project creation was successful
-if [ $? -eq 0 ]; then
-  echo ""
-  echo "Your project $project_name has been created successfully."
-else
-  echo ""
-  echo "Error: Unable to create the Spring Boot project. Please check the information or your internet connection."
-fi
+# if [ $? -eq 0 ]; then
+#   echo ""
+#   echo "Your project $project_name has been created successfully."
+# else
+#   echo ""
+#   echo "Error: Unable to create the Spring Boot project. Please check the information or your internet connection."
+# fi
